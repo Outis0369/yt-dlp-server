@@ -62,7 +62,6 @@ def try_ytdlp(url):
         return [{'path': filepath, 'type': media_type, 'caption': caption}]
 
 def try_instagram_a1(url):
-    """Try old JSON endpoint ?__a=1"""
     try:
         json_url = url.rstrip('/') + '/?__a=1&__d=dis'
         headers = {'User-Agent': 'Mozilla/5.0'}
@@ -89,7 +88,6 @@ def try_instagram_a1(url):
     return None
 
 def try_instagram_embed(url):
-    """Try embed page"""
     try:
         embed_url = url.rstrip('/') + '/embed/captioned/'
         headers = {'User-Agent': 'Mozilla/5.0'}
@@ -145,7 +143,6 @@ def try_ddinstagram(url):
     return None
 
 def try_snapinsta(url):
-    # ممکنه کار کنه
     api = f"https://api.snapinsta.app/api?url={url}"
     try:
         r = requests.get(api, timeout=15)
@@ -168,7 +165,7 @@ def process_media_list(media_list):
     if not media_list:
         return False
     for media in media_list:
-        if media.get('path'):  # from yt-dlp
+        if media.get('path'):
             filepath = media['path']
             file_type = media['type']
             caption = media['caption']
@@ -176,7 +173,7 @@ def process_media_list(media_list):
             os.unlink(filepath)
             if not result.get('ok'):
                 send_text(f"Error sending file: {result.get('description')}")
-        else:  # from URL
+        else:
             media_url = media['url']
             file_type = media['type']
             ext = 'mp4' if file_type == 'video' else 'jpg'
